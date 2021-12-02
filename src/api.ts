@@ -1,12 +1,16 @@
 import helper from './helper';
 
-async function api(baseUrl, config, method, params) {
+interface ErrorType extends Error{
+  res?: Response
+}
+
+async function api<T>(baseUrl: string, config: Config, method: ApiMethods, params: T) {
   const url = new URL(baseUrl);
   const auth = Buffer.from(`${config.username}:${config.apiKey}`).toString(
     'base64'
   );
   const authHeader = `Basic ${auth}`;
-  const options = { method, headers: { Authorization: authHeader } };
+  const options = { method, headers: { Authorization: authHeader }, body: null };
   if (method === 'POST') {
     options.body = new helper.FormData();
     Object.keys(params).forEach((key) => {
@@ -37,7 +41,7 @@ async function api(baseUrl, config, method, params) {
       } else {
         message += ' Please check the API documentation.';
       }
-      const error = new Error(message);
+      const error: ErrorType = new Error(message);
       error.res = response;
       throw error;
     }

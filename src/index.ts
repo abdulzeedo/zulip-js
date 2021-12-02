@@ -15,7 +15,7 @@ import filters from './resources/filters';
 import eventsWapper from './events_wrapper';
 
 function getCallEndpoint(config) {
-  return function callEndpoint(endpoint, method = 'GET', params) {
+  return function callEndpoint(endpoint, method: ApiMethods = 'GET', params) {
     const myConfig = { ...config };
     let finalendpoint = endpoint;
     if (!endpoint.startsWith('/')) {
